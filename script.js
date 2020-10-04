@@ -6,6 +6,8 @@ let p1x, p2x, p1y, p2y;
 // ball position and velocity
 let ballX, ballY, ballVelX, ballVelY;
 
+let p1UpPressed, p1DownPressed, p2UpPressed, p2DownPressed;
+
 // scores
 let p1ScoreEl = document.querySelector("#score-1");
 let p2ScoreEl = document.querySelector("#score-2");
@@ -22,6 +24,7 @@ window.onload = function () {
     setInitialPositions();
 
     window.addEventListener("keydown", onKeydown);
+    window.addEventListener("keyup", onKeyup);
 
     updateScore();
 
@@ -33,6 +36,18 @@ function draw() {
     ctx.fillStyle = "#000";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+    // move paddles
+    if (p1UpPressed && p1y >= 0) {
+        p1y -= 7;
+    } else if (p1DownPressed && p1y < canvas.height - PADDLE_HEIGHT) {
+        p1y += 7;
+    }
+
+    if (p2UpPressed && p2y >= 0) {
+        p2y -= 7;
+    } else if (p2DownPressed && p2y < canvas.height - PADDLE_HEIGHT) {
+        p2y += 7;
+    }
     // player 1
     drawPaddle(p1x, p1y);
     // player 2
@@ -89,25 +104,36 @@ function onKeydown(e) {
     switch (e.keyCode) {
         case 38:
             e.preventDefault();
-            if (p2y > 0) {
-                p2y -= 15;
-            }
+            p2UpPressed = true;
             break;
         case 40:
             e.preventDefault();
-            if (p2y < canvas.height - PADDLE_HEIGHT) {
-                p2y += 15;
-            }
+            p2DownPressed = true;
             break;
         case 87:
-            if (p1y > 0) {
-                p1y -= 15;
-            }
+            p1UpPressed = true;
             break;
         case 83:
-            if (p1y < canvas.height - PADDLE_HEIGHT) {
-                p1y += 15;
-            }
+            p1DownPressed = true;
+            break;
+    }
+}
+
+function onKeyup(e) {
+    switch (e.keyCode) {
+        case 38:
+            e.preventDefault();
+            p2UpPressed = false;
+            break;
+        case 40:
+            e.preventDefault();
+            p2DownPressed = false;
+            break;
+        case 87:
+            p1UpPressed = false;
+            break;
+        case 83:
+            p1DownPressed = false;
             break;
     }
 }
@@ -120,7 +146,7 @@ function setInitialPositions() {
 
     ballX = canvas.width / 2 - BALL_HEIGHT;
     ballY = canvas.height / 2 - BALL_HEIGHT;
-    ballVelX = 2;
+    ballVelX = 3;
     ballVelY = 2;
 }
 
