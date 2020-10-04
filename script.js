@@ -25,7 +25,7 @@ window.onload = function () {
 
     updateScore();
 
-    this.setInterval(draw, 15);
+    this.requestAnimationFrame(draw);
 };
 
 function draw() {
@@ -69,14 +69,20 @@ function draw() {
         if (hitsWall2) {
             p1Score++;
         }
+
         updateScore();
         setInitialPositions();
+
+        setTimeout(() => requestAnimationFrame(draw), 1000);
+        return;
     }
 
     ballX += ballVelX;
     ballY -= ballVelY;
 
     drawBall(ballX, ballY);
+
+    requestAnimationFrame(draw);
 }
 
 function onKeydown(e) {
