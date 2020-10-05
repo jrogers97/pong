@@ -14,6 +14,9 @@ let p2ScoreEl = document.querySelector("#score-2");
 let p1Score = 0;
 let p2Score = 0;
 
+// starting ball direction
+let ballStartsLeft;
+
 const PADDLE_HEIGHT = 80;
 const BALL_HEIGHT = 5;
 
@@ -59,16 +62,24 @@ function draw() {
     }
 
     // bounce off paddle
-    const hitsPaddle1 = ballX <= p1x + 5 && ballX >= p1x + 3 && ballY <= p1y + PADDLE_HEIGHT && ballY >= p1y;
-    const hitsPaddle2 = ballX >= p2x - 5 && ballX <= p2x - 3 && ballY <= p2y + PADDLE_HEIGHT && ballY >= p2y;
+    const hitsPaddle1 =
+        ballX <= p1x + 5 &&
+        ballX >= p1x + 3 &&
+        ballY <= p1y + PADDLE_HEIGHT &&
+        ballY >= p1y;
+    const hitsPaddle2 =
+        ballX >= p2x - 5 &&
+        ballX <= p2x - 3 &&
+        ballY <= p2y + PADDLE_HEIGHT &&
+        ballY >= p2y;
     if (hitsPaddle1 || hitsPaddle2) {
         ballVelX = ballVelX * -1;
-        
+
         // location of the paddle that the ball hit (ranging from -0.5 to 0.5, -0.5 being top )
         let hitPaddleLoc;
         if (hitsPaddle1) {
             hitPaddleLoc = (ballY - p1y) / PADDLE_HEIGHT - 0.5;
-        } 
+        }
         if (hitsPaddle2) {
             hitPaddleLoc = (ballY - p2y) / PADDLE_HEIGHT - 0.5;
         }
@@ -139,6 +150,8 @@ function onKeyup(e) {
 }
 
 function setInitialPositions() {
+    ballStartsLeft = !ballStartsLeft;
+
     p1y = canvas.height / 2 - PADDLE_HEIGHT / 2;
     p2y = canvas.height / 2 - PADDLE_HEIGHT / 2;
     p1x = 20;
@@ -146,7 +159,7 @@ function setInitialPositions() {
 
     ballX = canvas.width / 2 - BALL_HEIGHT;
     ballY = canvas.height / 2 - BALL_HEIGHT;
-    ballVelX = 3;
+    ballVelX = 3 * (ballStartsLeft ? -1 : 1);
     ballVelY = 2;
 }
 
